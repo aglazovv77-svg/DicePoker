@@ -58,7 +58,7 @@ public class Game {
             playerScore += points;
 
             printDetectCombination(points);
-            printPlayerScore(playerScore);
+            printScore(playerScore);
 
             BOT_ROLL = botTurn();
             printRoll(BOT_ROLL);
@@ -70,7 +70,7 @@ public class Game {
             botScore += pointsBot;
 
             printDetectCombination(pointsBot);
-            printBotScore(botScore);
+            printScore(botScore);
 
             if (isPlayer()) {
                 System.out.println("Поздравляем вы выиграли, набрано очков = " + playerScore);
@@ -224,14 +224,14 @@ public class Game {
         System.out.println(points);
     }
 
-    private static void printPlayerScore(int score) {
-        System.out.println("Ваш общий счет : " + playerScore);
-        System.out.println("___________________________________");
-    }
-
-    private static void printBotScore(int score) {
-        System.out.println("Общий счет бота: " + botScore);
-        System.out.println("___________________________________");
+    private static void printScore(int score) {
+        if (score == playerScore) {
+            System.out.println("Ваш общий счет : " + playerScore);
+            System.out.println("___________________________________");
+        } else {
+            System.out.println("Общий счет бота: " + botScore);
+            System.out.println("___________________________________");
+        }
     }
 
     private static boolean isGameOver() {
