@@ -1,8 +1,12 @@
 package com.gmail.a.glazovv77;
 
-public class App
-{
+public class App {
+
+    private static Game game;
+
     public static void main( String[] args ) {
+
+        game = new Game();
 
         Game.printGreeting();
 
@@ -11,7 +15,6 @@ public class App
             System.out.println("Вы вышли из игры");
             return;
         }
-        Game.start();
-
+        game.start();
     }
 }
