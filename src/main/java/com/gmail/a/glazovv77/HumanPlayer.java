@@ -17,6 +17,7 @@ public class HumanPlayer {
 
     public void playerTurn() {
         diceRoller.rollDice(playerDices);
+        //TODO:
         // запрашиваем переброс - написать класс для ввода и вынести методы ввода
         // делаем переброс - уже есть DiceRoller
     }
