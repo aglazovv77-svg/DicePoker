@@ -1,25 +1,30 @@
 package com.gmail.a.glazovv77;
 
 import java.util.*;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 public class Game {
+
+    private final Random random;
+    private final DiceRoller diceRoller;
+    private final HumanPlayer humanPlayer;
+    private final BotPlayer botPlayer;
 
     private static final String START = "Y";
     private static final String QUIT = "N";
-
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
-
     private static final Scanner scanner = new Scanner(System.in);
-    private final Random random = new Random();
-
     private static final int WINNING_SCORE = 100;
 
+
+
     // Refactored
-    HumanPlayer humanPlayer = new HumanPlayer(random);
-    BotPlayer botPlayer = new BotPlayer(random);
+
 
     public static void printGreeting() {
         log.info("Игра Покер на костях \n Вы хотите начать игру [{}] или [{}] \n", START, QUIT);
@@ -48,11 +53,11 @@ public class Game {
         while (!isGameOver()) {
 
             humanPlayer.playerTurn();
-            PLAYER_ROLL = humanPlayer.getPLAYER_ROLL();
+            PLAYER_ROLL = humanPlayer.getPlayerDices();
             printRoll(PLAYER_ROLL);
 
             int[] choiceDiceIndexes = getRerollChoice();
-            int[] diceRoll = rerollSelectedDice(PLAYER_ROLL, choiceDiceIndexes);
+            int[] diceRoll = diceRoller.rerollSelectedDice(PLAYER_ROLL, choiceDiceIndexes);
             printRoll(diceRoll);
 
             int[] frequencies = countFrequencies(diceRoll);
@@ -65,7 +70,7 @@ public class Game {
             printScore(humanPlayer.getPlayerScore());
 
             botPlayer.botTurn();
-            BOT_ROLL = botPlayer.getBOT_ROLL();
+            BOT_ROLL = botPlayer.getBotDices();
             printRoll(BOT_ROLL);
 
             int[] frequenciesBots = countFrequencies(BOT_ROLL);
@@ -98,7 +103,7 @@ public class Game {
         }
         log.info(sb.toString());
     }
-
+    //спрашивает индексы перебрасываемых костей
     private static int[] getRerollChoice() {
         log.info("Вы хотите перебросить какие-нибудь кости? Введите только [{}] или [{}] ", START, QUIT);
         String answer = scanner.nextLine().toUpperCase();
@@ -119,12 +124,6 @@ public class Game {
         return choiceDiceIndexes;
     }
 
-    private int[] rerollSelectedDice(int[] diceRoll, int[] indexes) {
-        for (int index : indexes) {
-            diceRoll[index] = random.nextInt(6) + 1;
-        }
-        return diceRoll;
-    }
 
     private static int[] countFrequencies(int[] diceRoll) {
         int[] frequencies = new int[7];

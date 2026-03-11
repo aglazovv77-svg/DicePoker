@@ -1,25 +1,24 @@
 package com.gmail.a.glazovv77;
 
 import lombok.Getter;
-import java.util.Random;
 
 @Getter
 public class HumanPlayer {
 
-    private int[] PLAYER_ROLL;
+    private int[] playerDices;
     private int playerScore;
-    private Random random;
+    private DiceRoller diceRoller;
 
-    public HumanPlayer(Random random) {
-        this.PLAYER_ROLL = new int[5];
+    public HumanPlayer(DiceRoller diceRoller) {
+        this.playerDices = new int[5];
         this.playerScore = 0;
-        this.random = random;
+        this.diceRoller = diceRoller;
     }
 
     public void playerTurn() {
-        for (int i = 0; i < 5; i++) {
-            PLAYER_ROLL[i] = random.nextInt(6) + 1;
-        }
+        diceRoller.rollDice(playerDices);
+        // запрашиваем переброс - написать класс для ввода и вынести методы ввода
+        // делаем переброс - уже есть DiceRoller
     }
 
     public void addScore(int points) {

@@ -1,14 +1,18 @@
 package com.gmail.a.glazovv77;
 
-public class App {
+import java.util.Random;
 
-    private static Game game;
+public class App {
 
     public static void main( String[] args ) {
 
-        game = new Game();
+        Random random = new Random();
+        DiceRoller diceRoller = new DiceRollerImpl(random);
+        HumanPlayer humanPlayer = new HumanPlayer(diceRoller);
+        BotPlayer botPlayer = new BotPlayer(diceRoller);
+        Game game = new Game(random, diceRoller,humanPlayer, botPlayer);
 
-        Game.printGreeting();
+        game.printGreeting();
 
         String command = Game.inputCommand();
         if(Game.isQuit(command)) {

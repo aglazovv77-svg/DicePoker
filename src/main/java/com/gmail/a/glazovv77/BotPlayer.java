@@ -1,29 +1,26 @@
 package com.gmail.a.glazovv77;
 
 import lombok.Getter;
-import java.util.Random;
 
 @Getter
 public class BotPlayer {
 
-    private int[] BOT_ROLL;
-    private int botScore;
-    private Random random;
+    private final DiceRoller diceRoller;
 
-    public BotPlayer(Random random) {
-        this.BOT_ROLL = new int[5];
+    private final int[] botDices;
+    private int botScore;
+
+    public BotPlayer(DiceRoller diceRoller) {
+        this.botDices = new int[5];
         this.botScore = 0;
-        this.random = random;
+        this.diceRoller = diceRoller;
     }
 
     public void botTurn() {
-        for (int i = 0; i < 5; i++) {
-            BOT_ROLL[i] = random.nextInt(6) + 1;
-        }
+        diceRoller.rollDice(botDices);
     }
 
     public void addScore(int pointsBot) {
         botScore += pointsBot;
     }
-
 }
