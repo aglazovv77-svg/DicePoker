@@ -17,10 +17,12 @@ public class BotPlayer {
     }
 
     public void botTurn() {
+
         diceRoller.rollDice(botDices);
     }
 
     public void addScore(int pointsBot) {
+
         botScore += pointsBot;
     }
 }

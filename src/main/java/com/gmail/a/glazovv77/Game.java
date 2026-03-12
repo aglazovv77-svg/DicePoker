@@ -7,24 +7,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class Game {
+public class Game implements RollPrinter {
 
     private final Random random;
+    private final Scanner scanner;
     private final DiceRoller diceRoller;
     private final HumanPlayer humanPlayer;
     private final BotPlayer botPlayer;
+    private final DiceRerollInput diceRerollInput;
 
     private static final String START = "Y";
     private static final String QUIT = "N";
+
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
-    private static final Scanner scanner = new Scanner(System.in);
+
     private static final int WINNING_SCORE = 100;
-
-
-
-    // Refactored
-
 
     public static void printGreeting() {
         log.info("Игра Покер на костях \n Вы хотите начать игру [{}] или [{}] \n", START, QUIT);
@@ -38,7 +36,7 @@ public class Game {
         return command.equals(QUIT);
     }
 
-    public static String inputCommand() {
+    public String inputCommand() {
         while (true) {
             String command = scanner.nextLine().toUpperCase();
             if (isStart(command) || isQuit(command)) {
@@ -56,14 +54,10 @@ public class Game {
             PLAYER_ROLL = humanPlayer.getPlayerDices();
             printRoll(PLAYER_ROLL);
 
-            int[] choiceDiceIndexes = getRerollChoice();
-            int[] diceRoll = diceRoller.rerollSelectedDice(PLAYER_ROLL, choiceDiceIndexes);
-            printRoll(diceRoll);
-
-            int[] frequencies = countFrequencies(diceRoll);
+            int[] frequencies = countFrequencies(PLAYER_ROLL);
             List<Integer> frequencyList = toSortedFrequencyList(frequencies);
 
-            int points = detectCombination(diceRoll, frequencies, frequencyList);
+            int points = detectCombination(PLAYER_ROLL, frequencies, frequencyList);
             humanPlayer.addScore(points);
 
             printDetectCombination(points);
@@ -93,7 +87,7 @@ public class Game {
     private void printRoll(int[] roll) {
         StringBuilder sb = new StringBuilder();
 
-        if (roll == PLAYER_ROLL) {
+        if (Arrays.equals(roll, PLAYER_ROLL)) {
             sb.append("Комбинация игрока = ");
         } else {
             sb.append("Комбинация бота = ");
@@ -103,27 +97,11 @@ public class Game {
         }
         log.info(sb.toString());
     }
-    //спрашивает индексы перебрасываемых костей
-    private static int[] getRerollChoice() {
-        log.info("Вы хотите перебросить какие-нибудь кости? Введите только [{}] или [{}] ", START, QUIT);
-        String answer = scanner.nextLine().toUpperCase();
 
-        if (answer.equals(QUIT)) {
-            return new int[0];
-        }
-        log.info("Какие кость(и)(индекс(ы)) хотите перебросить?");
-        log.info("Если несколько то укажите через пробел от 1 до 5 (например 1 3 5)");
-
-        String input = scanner.nextLine().trim();
-        String[] parts = input.split(" ");
-        int[] choiceDiceIndexes = new int[parts.length];
-
-        for (int i = 0; i < parts.length; i++) {
-            choiceDiceIndexes[i] = Integer.parseInt(parts[i]) - 1;
-        }
-        return choiceDiceIndexes;
+    @Override
+    public void print(int[] roll) {
+        printRoll(roll);
     }
-
 
     private static int[] countFrequencies(int[] diceRoll) {
         int[] frequencies = new int[7];
