@@ -50,8 +50,8 @@ public class Game implements RollPrinter {
 
         while (!isGameOver()) {
 
-            humanPlayer.playerTurn();
             PLAYER_ROLL = humanPlayer.getPlayerDices();
+            humanPlayer.playerTurn();
             printRoll(PLAYER_ROLL);
 
             int[] frequencies = countFrequencies(PLAYER_ROLL);
@@ -87,7 +87,7 @@ public class Game implements RollPrinter {
     private void printRoll(int[] roll) {
         StringBuilder sb = new StringBuilder();
 
-        if (Arrays.equals(roll, PLAYER_ROLL)) {
+        if (roll == PLAYER_ROLL) {
             sb.append("Комбинация игрока = ");
         } else {
             sb.append("Комбинация бота = ");
