@@ -23,15 +23,17 @@ public class Game implements RollPrinter {
     private static final int FULL_HOUSE = 30;
     private static final int THREE_OF_A_KIND = 20;
 
+    private static final String SEPARATOR = "___________________________________";
+
     private static final String START = "Y";
     private static final String QUIT = "N";
 
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
 
-    static int twoPair;
-    static int onePair;
-    static int highCard;
+    private static int twoPair;
+    private static int onePair;
+    private static int highCard;
 
     private static final int WINNING_SCORE = 100;
 
@@ -160,12 +162,13 @@ public class Game implements RollPrinter {
         }
 
         if (list.get(0) == 2 && list.get(1) == 2) {
+            int sumDice = 0;
             for (int i = 0; i < frequencies.length; i++) {
                 if (frequencies[i] == 2) {
-                    twoPair += i * 2;
+                    sumDice += i * 2;
                 }
             }
-            return twoPair;
+            return twoPair = sumDice;
         }
 
         if (list.get(0) == 2) {
@@ -230,10 +233,10 @@ public class Game implements RollPrinter {
     private void printScore(int score) {
         if (score == humanPlayer.getPlayerScore()) {
             log.info("Ваш общий счет : " + humanPlayer.getPlayerScore());
-            log.info("___________________________________");
+            log.info(SEPARATOR);
         } else {
             log.info("Общий счет бота: " + botPlayer.getBotScore());
-            log.info("___________________________________");
+            log.info(SEPARATOR);
         }
     }
 
