@@ -16,11 +16,22 @@ public class Game implements RollPrinter {
     private final BotPlayer botPlayer;
     private final DiceRerollInput diceRerollInput;
 
+    private static final int SMALL_STRAIGHT = 15;
+    private static final int LARGE_STRAIGHT = 25;
+    private static final int FIVE_OF_A_KIND = 50;
+    private static final int FOUR_OF_A_KIND = 35;
+    private static final int FULL_HOUSE = 30;
+    private static final int THREE_OF_A_KIND = 20;
+
     private static final String START = "Y";
     private static final String QUIT = "N";
 
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
+
+    static int twoPair;
+    static int onePair;
+    static int highCard;
 
     private static final int WINNING_SCORE = 100;
 
@@ -125,57 +136,53 @@ public class Game implements RollPrinter {
     private static int detectCombination(int[] diceRoll, int[] frequencies, List<Integer> list) {
 
         if (isSmallStraight(diceRoll)) {
-            log.info("Младший стрит: ");
-            return 15;
+            return SMALL_STRAIGHT;
         }
+
         if (isLargeStraight(diceRoll)) {
-            log.info("Старший стрит: ");
-            return 25;
+            return LARGE_STRAIGHT;
         }
+
         if (list.get(0) == 5) {
-            log.info("Покер: ");
-            return 50;
+            return FIVE_OF_A_KIND;
         }
+
         if (list.get(0) == 4) {
-            log.info("Каре: ");
-            return 35;
+            return FOUR_OF_A_KIND;
         }
+
         if (list.get(0) == 3 && list.get(1) == 2) {
-            log.info("Фул-хауз: ");
-            return 30;
+            return FULL_HOUSE;
         }
+
         if (list.get(0) == 3) {
-            log.info("Сет: ");
-            return 20;
+            return THREE_OF_A_KIND;
         }
+
         if (list.get(0) == 2 && list.get(1) == 2) {
-            int sumDice = 0;
             for (int i = 0; i < frequencies.length; i++) {
                 if (frequencies[i] == 2) {
-                    sumDice += i * 2;
+                    twoPair += i * 2;
                 }
             }
-            log.info("Две пары: ");
-            return sumDice;
+            return twoPair;
         }
+
         if (list.get(0) == 2) {
-            int sumDice = 0;
             for (int i = 0; i < frequencies.length; i++) {
                 if (frequencies[i] == 2) {
-                    sumDice = i * 2;
+                    onePair = i * 2;
                 }
             }
-            log.info("Пара: ");
-            return sumDice;
+            return onePair;
         }
-        int maxDice = Integer.MIN_VALUE;
+
         for (int value : diceRoll) {
-            if ((value > maxDice)) {
-                maxDice = value;
+            if ((value > highCard)) {
+                highCard = value;
             }
         }
-        log.info("Старшая карта: ");
-        return maxDice;
+        return highCard;
     }
 
     private static boolean isSmallStraight(int[] dice) {
@@ -191,7 +198,33 @@ public class Game implements RollPrinter {
     }
 
     private static void printDetectCombination(int points) {
-        log.info("{}", points);
+        if(points == SMALL_STRAIGHT) {
+            log.info("Младший стрит: " + SMALL_STRAIGHT);
+        }
+        else if(points == LARGE_STRAIGHT) {
+            log.info("Старший стрит: " + LARGE_STRAIGHT);
+        }
+        else if(points == FIVE_OF_A_KIND) {
+            log.info("Покер: " + FIVE_OF_A_KIND);
+        }
+        else if(points == FOUR_OF_A_KIND) {
+            log.info("Каре: " + FOUR_OF_A_KIND);
+        }
+        else if(points == FULL_HOUSE) {
+            log.info("Фул-Хауз: " + FULL_HOUSE);
+        }
+        else if(points == THREE_OF_A_KIND) {
+            log.info("Сет: " + THREE_OF_A_KIND);
+        }
+        else if(points == twoPair) {
+            log.info("Две пары: " + twoPair);
+        }
+        else if(points == onePair) {
+            log.info("Пара: " + onePair);
+        }
+        else {
+            log.info("Старшая карта: " + highCard);
+        }
     }
 
     private void printScore(int score) {
