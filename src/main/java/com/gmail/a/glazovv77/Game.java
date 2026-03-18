@@ -16,26 +16,24 @@ public class Game implements RollPrinter {
     private final BotPlayer botPlayer;
     private final DiceRerollInput diceRerollInput;
 
+    private static final int WINNING_SCORE = 100;
+    private static final String SEPARATOR = "___________________________________";
+
+    private static final String START = "Y";
+    private static final String QUIT = "N";
+
     private static final int SMALL_STRAIGHT = 15;
     private static final int LARGE_STRAIGHT = 25;
     private static final int FIVE_OF_A_KIND = 50;
     private static final int FOUR_OF_A_KIND = 35;
     private static final int FULL_HOUSE = 30;
     private static final int THREE_OF_A_KIND = 20;
-
-    private static final String SEPARATOR = "___________________________________";
-
-    private static final String START = "Y";
-    private static final String QUIT = "N";
-
-    int[] PLAYER_ROLL;
-    int[] BOT_ROLL;
-
     private static int twoPair;
     private static int onePair;
     private static int highCard;
 
-    private static final int WINNING_SCORE = 100;
+    int[] PLAYER_ROLL;
+    int[] BOT_ROLL;
 
     public static void printGreeting() {
         log.info("Игра Покер на костях \n Вы хотите начать игру [{}] или [{}] \n", START, QUIT);
@@ -201,31 +199,23 @@ public class Game implements RollPrinter {
     }
 
     private static void printDetectCombination(int points) {
-        if(points == SMALL_STRAIGHT) {
+        if (points == SMALL_STRAIGHT) {
             log.info("Младший стрит: " + SMALL_STRAIGHT);
-        }
-        else if(points == LARGE_STRAIGHT) {
+        } else if (points == LARGE_STRAIGHT) {
             log.info("Старший стрит: " + LARGE_STRAIGHT);
-        }
-        else if(points == FIVE_OF_A_KIND) {
+        } else if (points == FIVE_OF_A_KIND) {
             log.info("Покер: " + FIVE_OF_A_KIND);
-        }
-        else if(points == FOUR_OF_A_KIND) {
+        } else if (points == FOUR_OF_A_KIND) {
             log.info("Каре: " + FOUR_OF_A_KIND);
-        }
-        else if(points == FULL_HOUSE) {
+        } else if (points == FULL_HOUSE) {
             log.info("Фул-Хауз: " + FULL_HOUSE);
-        }
-        else if(points == THREE_OF_A_KIND) {
+        } else if (points == THREE_OF_A_KIND) {
             log.info("Сет: " + THREE_OF_A_KIND);
-        }
-        else if(points == twoPair) {
+        } else if (points == twoPair) {
             log.info("Две пары: " + twoPair);
-        }
-        else if(points == onePair) {
+        } else if (points == onePair) {
             log.info("Пара: " + onePair);
-        }
-        else {
+        } else {
             log.info("Старшая карта: " + highCard);
         }
     }
