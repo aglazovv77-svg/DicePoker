@@ -15,13 +15,14 @@ public class Game {
     private final HumanPlayer humanPlayer;
     private final BotPlayer botPlayer;
     private final DiceRerollInput diceRerollInput;
+    private final CombinationManager combinationManager;
 
     private static final int WINNING_SCORE = 100;
 
     private static final String START = "Y";
     private static final String QUIT = "N";
 
-    protected static final int SMALL_STRAIGHT = 15;
+    protected static final int SMALL_STRAIGHT_SCORE = 15;
     protected static final int LARGE_STRAIGHT = 25;
     protected static final int FIVE_OF_A_KIND = 50;
     protected static final int FOUR_OF_A_KIND = 35;
@@ -34,20 +35,23 @@ public class Game {
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
 
-    Printer printer = new Printer();
+    RollPrinterImpl rollPrinterImpl = new RollPrinterImpl();
 
+    //TODO: вынести в Printer
     public static void printGreeting() {
         log.info("Игра Покер на костях \n Вы хотите начать игру [{}] или [{}] \n", START, QUIT);
     }
 
+    //TODO: вынести в InputManager
     private static boolean isStart(String command) {
         return command.equals(START);
     }
-
+    //TODO: вынести в InputManager
     public static boolean isQuit(String command) {
         return command.equals(QUIT);
     }
 
+    //TODO: вынести в InputManager
     public String inputCommand() {
         while (true) {
             String command = scanner.nextLine().toUpperCase();
@@ -64,45 +68,41 @@ public class Game {
 
             PLAYER_ROLL = humanPlayer.getPlayerDices();
             humanPlayer.playerTurn();
-            printer.printRoll("игрока ", PLAYER_ROLL);
+            rollPrinterImpl.printRoll("игрока ", PLAYER_ROLL);
 
-            int[] frequencies = countFrequencies(PLAYER_ROLL);
+            int[] frequencies = combinationManager.countFrequencies(PLAYER_ROLL);
+            //TODO: исправить
             List<Integer> frequencyList = toSortedFrequencyList(frequencies);
-
+            //TODO: исправить
             int points = detectCombination(PLAYER_ROLL, frequencies, frequencyList);
             humanPlayer.addScore(points);
 
-            Printer.printDetectCombination(points);
-            printer.printScore(" игрока", humanPlayer.getPlayerScore());
+            RollPrinterImpl.printDetectCombination(points);
+            rollPrinterImpl.printScore(" игрока", humanPlayer.getPlayerScore());
 
             botPlayer.botTurn();
             BOT_ROLL = botPlayer.getBotDices();
-            printer.printRoll("бота ", BOT_ROLL);
-
+            rollPrinterImpl.printRoll("бота ", BOT_ROLL);
+            //TODO: исправить
             int[] frequenciesBots = countFrequencies(BOT_ROLL);
+            //TODO: исправить
             List<Integer> frequencyListBot = toSortedFrequencyList(frequenciesBots);
-
+            //TODO: исправить
             int pointsBot = detectCombination(BOT_ROLL, frequenciesBots, frequencyListBot);
             botPlayer.addScore(pointsBot);
 
-            Printer.printDetectCombination(pointsBot);
-            printer.printScore(" бота", botPlayer.getBotScore());
+            RollPrinterImpl.printDetectCombination(pointsBot);
+            rollPrinterImpl.printScore(" бота", botPlayer.getBotScore());
 
-            if (isPlayer()) {
+            if (isPlayerWin()) {
                 log.info("Поздравляем вы выиграли, набрано очков = " + humanPlayer.getPlayerScore());
-            } else if (isBot()) {
+            } else if (isBotWin()) {
                 log.info("Выиграл бот, набрано очков = " + botPlayer.getBotScore());
             }
         }
     }
 
-    private static int[] countFrequencies(int[] diceRoll) {
-        int[] frequencies = new int[7];
-        for (int value : diceRoll) {
-            frequencies[value]++;
-        }
-        return frequencies;
-    }
+
 
     private static List<Integer> toSortedFrequencyList(int[] frequencies) {
         List<Integer> frequencyList = new ArrayList<>();
@@ -115,10 +115,11 @@ public class Game {
         return frequencyList;
     }
 
+    //TODO: вынести в CombinationManager
     private static int detectCombination(int[] diceRoll, int[] frequencies, List<Integer> list) {
 
         if (isSmallStraight(diceRoll)) {
-            return SMALL_STRAIGHT;
+            return SMALL_STRAIGHT_SCORE;
         }
 
         if (isLargeStraight(diceRoll)) {
@@ -168,12 +169,13 @@ public class Game {
         return highCard;
     }
 
+    //TODO: вынести в CombinationManager
     private static boolean isSmallStraight(int[] dice) {
         int[] sorted = dice.clone();
         Arrays.sort(sorted);
         return Arrays.equals(sorted, new int[]{1, 2, 3, 4, 5});
     }
-
+    //TODO: вынести в CombinationManager
     private static boolean isLargeStraight(int[] dice) {
         int[] sorted = dice.clone();
         Arrays.sort(sorted);
@@ -181,15 +183,14 @@ public class Game {
     }
 
     private boolean isGameOver() {
-        return isPlayer() || isBot();
+        return isPlayerWin() || isBotWin();
     }
 
-    private boolean isPlayer() {
+    private boolean isPlayerWin() {
         return humanPlayer.getPlayerScore() >= WINNING_SCORE;
-
     }
 
-    private boolean isBot() {
+    private boolean isBotWin() {
         return botPlayer.getBotScore() >= WINNING_SCORE;
     }
 }

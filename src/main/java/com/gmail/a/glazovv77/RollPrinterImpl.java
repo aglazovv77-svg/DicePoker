@@ -3,9 +3,10 @@ package com.gmail.a.glazovv77;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Printer implements RollPrinter {
+public class RollPrinterImpl implements RollPrinter {
 
     private static final String SEPARATOR = "___________________________________";
+    private static final String SMALL_STRAIGHT_TEXT = "Младший стрит: ";
 
     protected void printRoll(String owner, int[] roll) {
         StringBuilder sb = new StringBuilder();
@@ -23,8 +24,9 @@ public class Printer implements RollPrinter {
     }
 
     static void printDetectCombination(int points) {
-        if (points == Game.SMALL_STRAIGHT) {
-            log.info("Младший стрит: " + points);
+        if (points == Game.SMALL_STRAIGHT_SCORE) {
+            log.info(SMALL_STRAIGHT_TEXT + points);
+            //TODO: вынести все строки в константы
         } else if (points == Game.LARGE_STRAIGHT) {
             log.info("Старший стрит: " + points);
         } else if (points == Game.FIVE_OF_A_KIND) {

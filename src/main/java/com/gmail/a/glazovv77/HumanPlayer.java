@@ -26,10 +26,7 @@ public class HumanPlayer {
     public void playerTurn() {
         diceRoller.rollDice(playerDices);
         rollPrinter.print("игрока", playerDices);
-        //TODO:
-        // запрашиваем переброс - написать класс для ввода и вынести методы ввода
         choiceDiceIndexes = diceRerollInput.getRerollChoice();
-        // делаем переброс - уже есть DiceRoller
         diceRoller.rerollSelectedDice(playerDices, choiceDiceIndexes);
     }
 

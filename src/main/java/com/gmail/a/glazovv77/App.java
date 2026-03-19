@@ -8,16 +8,18 @@ public class App {
     public static void main( String[] args ) {
 
         Random random = new Random();
+        CombinationManager combinationManager = new CombinationManager();
+
         Scanner scanner = new Scanner(System.in);
-        Printer printer = new Printer();
+        RollPrinterImpl rollPrinterImpl = new RollPrinterImpl();
 
         DiceRoller diceRoller = new DiceRollerImpl(random);
         DiceRerollInput diceRerollInput = new DiceRerollInput(scanner);
 
-        HumanPlayer humanPlayer = new HumanPlayer(diceRoller, diceRerollInput, printer);
+        HumanPlayer humanPlayer = new HumanPlayer(diceRoller, diceRerollInput, rollPrinterImpl);
         BotPlayer botPlayer = new BotPlayer(diceRoller);
 
-        Game game = new Game(random, scanner, diceRoller, humanPlayer, botPlayer, diceRerollInput);
+        Game game = new Game(random, scanner, diceRoller, humanPlayer, botPlayer, diceRerollInput, combinationManager);
 
         Game.printGreeting();
 
