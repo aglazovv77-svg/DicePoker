@@ -9,17 +9,15 @@ public class App {
 
         Random random = new Random();
         Scanner scanner = new Scanner(System.in);
+        Printer printer = new Printer();
 
         DiceRoller diceRoller = new DiceRollerImpl(random);
         DiceRerollInput diceRerollInput = new DiceRerollInput(scanner);
-        RollPrinter rollPrinter = roll -> {};
 
-        HumanPlayer humanPlayer = new HumanPlayer(diceRoller, diceRerollInput, rollPrinter);
+        HumanPlayer humanPlayer = new HumanPlayer(diceRoller, diceRerollInput, printer);
         BotPlayer botPlayer = new BotPlayer(diceRoller);
 
         Game game = new Game(random, scanner, diceRoller, humanPlayer, botPlayer, diceRerollInput);
-
-        humanPlayer.setRollPrinter(game);
 
         Game.printGreeting();
 

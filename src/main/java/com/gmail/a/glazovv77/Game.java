@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class Game implements RollPrinter {
+public class Game {
 
     private final Random random;
     private final Scanner scanner;
@@ -17,23 +17,24 @@ public class Game implements RollPrinter {
     private final DiceRerollInput diceRerollInput;
 
     private static final int WINNING_SCORE = 100;
-    private static final String SEPARATOR = "___________________________________";
 
     private static final String START = "Y";
     private static final String QUIT = "N";
 
-    private static final int SMALL_STRAIGHT = 15;
-    private static final int LARGE_STRAIGHT = 25;
-    private static final int FIVE_OF_A_KIND = 50;
-    private static final int FOUR_OF_A_KIND = 35;
-    private static final int FULL_HOUSE = 30;
-    private static final int THREE_OF_A_KIND = 20;
-    private static int twoPair;
-    private static int onePair;
-    private static int highCard;
+    protected static final int SMALL_STRAIGHT = 15;
+    protected static final int LARGE_STRAIGHT = 25;
+    protected static final int FIVE_OF_A_KIND = 50;
+    protected static final int FOUR_OF_A_KIND = 35;
+    protected static final int FULL_HOUSE = 30;
+    protected static final int THREE_OF_A_KIND = 20;
+    protected static int twoPair;
+    protected static int onePair;
+    protected static int highCard;
 
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
+
+    Printer printer = new Printer();
 
     public static void printGreeting() {
         log.info("Игра Покер на костях \n Вы хотите начать игру [{}] или [{}] \n", START, QUIT);
@@ -63,7 +64,7 @@ public class Game implements RollPrinter {
 
             PLAYER_ROLL = humanPlayer.getPlayerDices();
             humanPlayer.playerTurn();
-            printRoll(PLAYER_ROLL);
+            printer.printRoll("игрока ", PLAYER_ROLL);
 
             int[] frequencies = countFrequencies(PLAYER_ROLL);
             List<Integer> frequencyList = toSortedFrequencyList(frequencies);
@@ -71,12 +72,12 @@ public class Game implements RollPrinter {
             int points = detectCombination(PLAYER_ROLL, frequencies, frequencyList);
             humanPlayer.addScore(points);
 
-            printDetectCombination(points);
-            printScore(humanPlayer.getPlayerScore());
+            Printer.printDetectCombination(points);
+            printer.printScore(" игрока", humanPlayer.getPlayerScore());
 
             botPlayer.botTurn();
             BOT_ROLL = botPlayer.getBotDices();
-            printRoll(BOT_ROLL);
+            printer.printRoll("бота ", BOT_ROLL);
 
             int[] frequenciesBots = countFrequencies(BOT_ROLL);
             List<Integer> frequencyListBot = toSortedFrequencyList(frequenciesBots);
@@ -84,8 +85,8 @@ public class Game implements RollPrinter {
             int pointsBot = detectCombination(BOT_ROLL, frequenciesBots, frequencyListBot);
             botPlayer.addScore(pointsBot);
 
-            printDetectCombination(pointsBot);
-            printScore(botPlayer.getBotScore());
+            Printer.printDetectCombination(pointsBot);
+            printer.printScore(" бота", botPlayer.getBotScore());
 
             if (isPlayer()) {
                 log.info("Поздравляем вы выиграли, набрано очков = " + humanPlayer.getPlayerScore());
@@ -93,25 +94,6 @@ public class Game implements RollPrinter {
                 log.info("Выиграл бот, набрано очков = " + botPlayer.getBotScore());
             }
         }
-    }
-
-    private void printRoll(int[] roll) {
-        StringBuilder sb = new StringBuilder();
-
-        if (roll == PLAYER_ROLL) {
-            sb.append("Комбинация игрока = ");
-        } else {
-            sb.append("Комбинация бота = ");
-        }
-        for (int value : roll) {
-            sb.append(value).append(" ");
-        }
-        log.info(sb.toString());
-    }
-
-    @Override
-    public void print(int[] roll) {
-        printRoll(roll);
     }
 
     private static int[] countFrequencies(int[] diceRoll) {
@@ -196,38 +178,6 @@ public class Game implements RollPrinter {
         int[] sorted = dice.clone();
         Arrays.sort(sorted);
         return Arrays.equals(sorted, new int[]{2, 3, 4, 5, 6});
-    }
-
-    private static void printDetectCombination(int points) {
-        if (points == SMALL_STRAIGHT) {
-            log.info("Младший стрит: " + SMALL_STRAIGHT);
-        } else if (points == LARGE_STRAIGHT) {
-            log.info("Старший стрит: " + LARGE_STRAIGHT);
-        } else if (points == FIVE_OF_A_KIND) {
-            log.info("Покер: " + FIVE_OF_A_KIND);
-        } else if (points == FOUR_OF_A_KIND) {
-            log.info("Каре: " + FOUR_OF_A_KIND);
-        } else if (points == FULL_HOUSE) {
-            log.info("Фул-Хауз: " + FULL_HOUSE);
-        } else if (points == THREE_OF_A_KIND) {
-            log.info("Сет: " + THREE_OF_A_KIND);
-        } else if (points == twoPair) {
-            log.info("Две пары: " + twoPair);
-        } else if (points == onePair) {
-            log.info("Пара: " + onePair);
-        } else {
-            log.info("Старшая карта: " + highCard);
-        }
-    }
-
-    private void printScore(int score) {
-        if (score == humanPlayer.getPlayerScore()) {
-            log.info("Ваш общий счет : " + humanPlayer.getPlayerScore());
-            log.info(SEPARATOR);
-        } else {
-            log.info("Общий счет бота: " + botPlayer.getBotScore());
-            log.info(SEPARATOR);
-        }
     }
 
     private boolean isGameOver() {
