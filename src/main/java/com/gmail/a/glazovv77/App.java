@@ -5,12 +5,14 @@ import java.util.Scanner;
 
 public class App {
 
-    public static void main( String[] args ) {
+    static void main(String[] args) {
 
         Random random = new Random();
-        CombinationManager combinationManager = new CombinationManager();
-
         Scanner scanner = new Scanner(System.in);
+
+        InputManagerGame inputManagerGame = new InputManagerGame(scanner);
+
+        CombinationManager combinationManager = new CombinationManager();
         RollPrinterImpl rollPrinterImpl = new RollPrinterImpl();
 
         DiceRoller diceRoller = new DiceRollerImpl(random);
@@ -19,12 +21,12 @@ public class App {
         HumanPlayer humanPlayer = new HumanPlayer(diceRoller, diceRerollInput, rollPrinterImpl);
         BotPlayer botPlayer = new BotPlayer(diceRoller);
 
-        Game game = new Game(random, scanner, diceRoller, humanPlayer, botPlayer, diceRerollInput, combinationManager);
+        Game game = new Game(humanPlayer, botPlayer, combinationManager);
 
-        Game.printGreeting();
+        RollPrinterImpl.printGreeting();
 
-        String command = game.inputCommand();
-        if(Game.isQuit(command)) {
+        String command = inputManagerGame.inputCommand();
+        if(InputManagerGame.isQuit(command)) {
             System.out.println("Вы вышли из игры");
             return;
         }
