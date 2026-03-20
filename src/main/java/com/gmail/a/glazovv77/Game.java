@@ -14,6 +14,9 @@ public class Game {
     private final CombinationManager combinationManager;
 
     private static final int WINNING_SCORE = 100;
+    private static final String IS_DRAW_TEXT = "Ничья! Оба игрока набрали больше 100 очков";
+    private static final String IS_PLAYER_WIN_TEXT = "Поздравляем вы выиграли, набрано очков = ";
+    private static final String IS_BOT_WIN_TEXT = "Выиграл бот, набрано очков = ";
 
     int[] PLAYER_ROLL;
     int[] BOT_ROLL;
@@ -51,11 +54,11 @@ public class Game {
             rollPrinterImpl.printScore(" бота", botPlayer.getBotScore());
 
             if (isDraw()) {
-                log.info("Ничья! Оба игрока набрали больше 100 очков");
+                log.info(IS_DRAW_TEXT);
             } else if (isPlayerWin()) {
-                 log.info("Поздравляем вы выиграли, набрано очков = " + humanPlayer.getPlayerScore());
+                 log.info(IS_PLAYER_WIN_TEXT + humanPlayer.getPlayerScore());
             } else if (isBotWin()) {
-                log.info("Выиграл бот, набрано очков = " + botPlayer.getBotScore());
+                log.info(IS_BOT_WIN_TEXT + botPlayer.getBotScore());
             }
         }
     }
