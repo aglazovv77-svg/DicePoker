@@ -14,7 +14,7 @@ public class Game {
     private final CombinationManager combinationManager;
 
     private static final int WINNING_SCORE = 100;
-    private static final String IS_DRAW_TEXT = "Ничья! Оба игрока набрали больше 100 очков";
+    private static final String IS_DRAW_TEXT = "НИЧЬЯ! Оба игрока набрали больше 100 очков";
     private static final String IS_PLAYER_WIN_TEXT = "Поздравляем вы выиграли, набрано очков = ";
     private static final String IS_BOT_WIN_TEXT = "Выиграл бот, набрано очков = ";
 
