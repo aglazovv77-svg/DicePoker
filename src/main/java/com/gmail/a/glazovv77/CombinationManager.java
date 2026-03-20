@@ -5,17 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.gmail.a.glazovv77.CombinationScoreStorage.*;
+import static com.gmail.a.glazovv77.CombinationType.*;
+
 public class CombinationManager {
 
-    protected static final int SMALL_STRAIGHT_SCORE = 15;
-    protected static final int LARGE_STRAIGHT_SCORE = 25;
-    protected static final int FIVE_OF_A_KIND_SCORE = 50;
-    protected static final int FOUR_OF_A_KIND_SCORE = 35;
-    protected static final int FULL_HOUSE_SCORE = 30;
-    protected static final int THREE_OF_A_KIND_SCORE = 20;
     protected static int twoPairScore;
     protected static int onePairScore;
-    protected static int highCardScore;
+
 
 
 
@@ -38,9 +35,9 @@ public class CombinationManager {
             return frequencyList;
         }
 
-    public int detectCombination(int[] diceRoll, int[] frequencies, List<Integer> list) {
+    public CombinationResult detectCombination(int[] diceRoll, int[] frequencies, List<Integer> list) {
             if (isSmallStraight(diceRoll)) {
-                return SMALL_STRAIGHT_SCORE;
+                return new CombinationResult(SMALL_STRAIGHT, SMALL_STRAIGHT_SCORE);
             }
             if (isLargeStraight(diceRoll)) {
                 return LARGE_STRAIGHT_SCORE;
@@ -57,6 +54,7 @@ public class CombinationManager {
             if (list.get(0) == 3) {
                 return THREE_OF_A_KIND_SCORE;
             }
+            //две пары
             if (list.get(0) == 2 && list.get(1) == 2) {
                 int sumDice = 0;
                 for (int i = 0; i < frequencies.length; i++) {
@@ -64,22 +62,26 @@ public class CombinationManager {
                         sumDice += i * 2;
                     }
                 }
-                return twoPairScore = sumDice;
+                return new CombinationResult(TWO_PAIR, sumDice);
             }
+            //одна пара
             if (list.get(0) == 2) {
+                int sumDice = 0;
                 for (int i = 0; i < frequencies.length; i++) {
                     if (frequencies[i] == 2) {
-                        onePairScore = i * 2;
+                        sumDice += i * 2;
                     }
                 }
-                return onePairScore;
+                return new CombinationResult(ONE_PAIR, sumDice);
             }
+            int max = 0;
             for (int value : diceRoll) {
-                if ((value > highCardScore)) {
-                    highCardScore = value;
+
+                if ((value > max)) {
+                    max = value;
                 }
             }
-            return highCardScore;
+            return new CombinationResult(HIGH_CARD, max);
         }
 
     private static boolean isSmallStraight(int[] dice) {

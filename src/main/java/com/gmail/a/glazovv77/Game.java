@@ -26,20 +26,24 @@ public class Game {
     public void start() {
 
         while (!isGameOver()) {
-
+            //бросили
             PLAYER_ROLL = humanPlayer.getPlayerDices();
+            //походили
             humanPlayer.playerTurn();
+            //намечатали
             rollPrinterImpl.printRoll("игрока ", PLAYER_ROLL);
 
+            //подготовили данные к подсчету и посчитали очки
             int[] frequencies = combinationManager.countFrequencies(PLAYER_ROLL);
             List<Integer> frequencyList = combinationManager.toSortedFrequencyList(frequencies);
-            int points = combinationManager.detectCombination(PLAYER_ROLL, frequencies, frequencyList);
-
-            humanPlayer.addScore(points);
-
-            RollPrinterImpl.printDetectCombination(points);
+            CombinationResult result = combinationManager.detectCombination(PLAYER_ROLL, frequencies, frequencyList);
+            //добавили очки
+            humanPlayer.addScore(result.getScore());
+            //напечатали какая комбинация и сколько очков
+            RollPrinterImpl.printDetectCombination(result);
             rollPrinterImpl.printScore(" игрока", humanPlayer.getPlayerScore());
 
+            //ДУБЛИРОВАНИЕ логики как у игрока - вынести код и выше и этот в метод, использовать метод
             botPlayer.botTurn();
             BOT_ROLL = botPlayer.getBotDices();
             rollPrinterImpl.printRoll("бота ", BOT_ROLL);
@@ -78,4 +82,6 @@ public class Game {
     private boolean isDraw() {
         return isPlayerWin() && isBotWin();
     }
+
+    //private void GameTurn(Player player) - ввести общий для HumanPlayer и BotPlayer класс
 }

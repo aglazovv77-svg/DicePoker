@@ -40,27 +40,8 @@ public class RollPrinterImpl implements RollPrinter {
         printRoll(owner, roll);
     }
 
-    static void printDetectCombination(int points) {
-        if (points == CombinationManager.SMALL_STRAIGHT_SCORE) {
-            log.info(SMALL_STRAIGHT_TEXT + points);
-            //TODO: вынести все строки в константы
-        } else if (points == CombinationManager.LARGE_STRAIGHT_SCORE) {
-            log.info(LARGE_STRAIGHT_TEXT + points);
-        } else if (points == CombinationManager.FIVE_OF_A_KIND_SCORE) {
-            log.info(FIVE_OF_A_KIND_TEXT + points);
-        } else if (points == CombinationManager.FOUR_OF_A_KIND_SCORE) {
-            log.info(FOUR_OF_A_KIND_TEXT + points);
-        } else if (points == CombinationManager.FULL_HOUSE_SCORE) {
-            log.info(FULL_HOUSE_TEXT + points);
-        } else if (points == CombinationManager.THREE_OF_A_KIND_SCORE) {
-            log.info(THREE_OF_A_KIND_TEXT + points);
-        } else if (points == CombinationManager.twoPairScore) {
-            log.info(TWO_PAIR_TEXT + points);
-        } else if (points == CombinationManager.onePairScore) {
-            log.info(ONE_PAIR_TEXT + points);
-        } else {
-            log.info(HIGH_CARD_TEXT + points);
-        }
+    static void printDetectCombination(CombinationResult result) {
+       log.info(result.toString());
     }
 
     void printScore(String owner, int score) {
