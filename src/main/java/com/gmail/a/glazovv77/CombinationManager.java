@@ -10,12 +10,6 @@ import static com.gmail.a.glazovv77.CombinationType.*;
 
 public class CombinationManager {
 
-    protected static int twoPairScore;
-    protected static int onePairScore;
-
-
-
-
     public int[] countFrequencies(int[] diceRoll) {
         int[] frequencies = new int[7];
         for (int value : diceRoll) {
@@ -40,19 +34,19 @@ public class CombinationManager {
                 return new CombinationResult(SMALL_STRAIGHT, SMALL_STRAIGHT_SCORE);
             }
             if (isLargeStraight(diceRoll)) {
-                return LARGE_STRAIGHT_SCORE;
+                return new CombinationResult(LARGE_STRAIGHT, LARGE_STRAIGHT_SCORE);
             }
             if (list.get(0) == 5) {
-                return FIVE_OF_A_KIND_SCORE;
+                return new CombinationResult(FIVE_OF_A_KIND, FIVE_OF_A_KIND_SCORE);
             }
             if (list.get(0) == 4) {
-                return FOUR_OF_A_KIND_SCORE;
+                return new CombinationResult(FOUR_OF_A_KIND, FOUR_OF_A_KIND_SCORE);
             }
             if (list.get(0) == 3 && list.get(1) == 2) {
-                return FULL_HOUSE_SCORE;
+                return new CombinationResult(FULL_HOUSE, FULL_HOUSE_SCORE);
             }
             if (list.get(0) == 3) {
-                return THREE_OF_A_KIND_SCORE;
+                return new CombinationResult(THREE_OF_A_KIND, THREE_OF_A_KIND_SCORE);
             }
             //две пары
             if (list.get(0) == 2 && list.get(1) == 2) {

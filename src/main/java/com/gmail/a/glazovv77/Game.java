@@ -50,9 +50,9 @@ public class Game {
 
             int[] frequenciesBots = combinationManager.countFrequencies(BOT_ROLL);
             List<Integer> frequencyListBot = combinationManager.toSortedFrequencyList(frequenciesBots);
-            int pointsBot = combinationManager.detectCombination(BOT_ROLL, frequenciesBots, frequencyListBot);
+            CombinationResult pointsBot = combinationManager.detectCombination(BOT_ROLL, frequenciesBots, frequencyListBot);
 
-            botPlayer.addScore(pointsBot);
+            botPlayer.addScore(pointsBot.getScore());
 
             RollPrinterImpl.printDetectCombination(pointsBot);
             rollPrinterImpl.printScore(" бота", botPlayer.getBotScore());
@@ -82,6 +82,4 @@ public class Game {
     private boolean isDraw() {
         return isPlayerWin() && isBotWin();
     }
-
-    //private void GameTurn(Player player) - ввести общий для HumanPlayer и BotPlayer класс
 }
