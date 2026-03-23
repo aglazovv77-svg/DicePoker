@@ -6,15 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 public class RollPrinterImpl implements RollPrinter {
 
     private static final String SEPARATOR = "___________________________________";
-    private static final String SMALL_STRAIGHT_TEXT = "Младший стрит: ";
-    private static final String LARGE_STRAIGHT_TEXT = "Старший стрит: ";
-    private static final String FIVE_OF_A_KIND_TEXT = "Покер: ";
-    private static final String FOUR_OF_A_KIND_TEXT = "Каре: ";
-    private static final String FULL_HOUSE_TEXT = "Фул-Хауз: ";
-    private static final String THREE_OF_A_KIND_TEXT = "Сет: ";
-    private static final String TWO_PAIR_TEXT = "Две пары: ";
-    private static final String ONE_PAIR_TEXT = "Пара: ";
-    private static final String HIGH_CARD_TEXT = "Старшая карта: ";
     private static final String TOTAL_SCORE_TEXT = "Общий счет: ";
 
 
@@ -41,7 +32,7 @@ public class RollPrinterImpl implements RollPrinter {
     }
 
     static void printDetectCombination(CombinationResult result) {
-       log.info(result.toString());
+       log.info(result.getCombinationType().getRussianText() + ": " + result.getScore());
     }
 
     void printScore(String owner, int score) {
